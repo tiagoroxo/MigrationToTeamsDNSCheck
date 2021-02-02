@@ -11,4 +11,6 @@ The credentials will be used to obtain all the domains automatically from the te
 #### The scrip will detect the DNS that does not exists.
 #### The scrip will detect the DNS that are poiting to Online.
 #### The scrip will detect the DNS that are poiting to On-Premises.
+####
+####
 ![Tool](https://github.com/tiagoroxo/MigrationToTeamsDNSCheck/blob/main/tool.JPG?raw=true)
