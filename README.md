@@ -13,6 +13,6 @@ The credentials will be used to obtain all the domains automatically from the te
 #### The scrip will detect the DNS that are poiting to On-Premises.
 ####
 ####
-#### Always use the most recent version of the Script.
+#### ----> Always use the most recent version of the Script <----
 #### Tool:
 ![Tool](https://github.com/tiagoroxo/MigrationToTeamsDNSCheck/blob/main/tool.JPG?raw=true)
