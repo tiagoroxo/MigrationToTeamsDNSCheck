@@ -11,7 +11,6 @@ The credentials will be used to obtain all the domains automatically from the te
 #### The script will detect the DNS that does not exists.
 #### The script will detect the DNS that are poiting to Online.
 #### The script will detect the DNS that are poiting to On-Premises.
-#### The script will detect the A records.
 ####
 #### ----> Always use the most recent version of the Script <----
 #### Tool:
