@@ -1,5 +1,5 @@
 # MigrationToTeamsDNSCheck
-Powershell Script used to query all Skype for Business hardcoded DNS's to all your Domains part of the tenant, help you detect your current configuration, and help you migrate the tenant Coexistance mode to TeamsOnly.
+Powershell Script used to query all Skype for Business hardcoded DNS's to all your Domains part of the tenant, to help you detect your current configuration, and help you migrate the tenant Coexistance mode to TeamsOnly.
 ##  Intructions: 
 ####  1. Run the following cmdlet: "Set-ExecutionPolicy -ExecutionPolicy Unrestricted"
 ####  2. Install Azure AD Module. Run the following cmdlet: "Install-Module -Name AzureAD"
