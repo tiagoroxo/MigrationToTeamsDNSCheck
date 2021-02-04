@@ -13,10 +13,10 @@ Powershell Script used to query all Skype for Business hardcoded DNS's to all yo
 #### The script will detect the DNS records that are poiting to Online.
 #### The script will detect the DNS records that are poiting to On-Premises.
 #### The script currently only queries the followings DNS:
-#### > Lyncdiscover
-#### > SIP
-#### > _sip._tls.
-#### > _sipfederationtls._tcp
+- Lyncdiscover
+- SIP
+- _sip._tls.
+-  _sipfederationtls._tcp
 ####
 #### ----> Always use the most recent version of the Script <----
 #### Tool:
