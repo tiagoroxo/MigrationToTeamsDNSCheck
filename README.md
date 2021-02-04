@@ -21,3 +21,4 @@ This sricpt will only list data, won't do any change.
 #### ----> Always use the most recent version of the Script <----
 #### Tool:
 ![Tool](https://github.com/tiagoroxo/MigrationToTeamsDNSCheck/blob/main/tool.JPG?raw=true)
+For more details, see http://aka.ms/UpgradeToTeams
