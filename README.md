@@ -6,9 +6,9 @@ Powershell Script used to query all Skype for Business hardcoded DNS's to all yo
 ####  3. Office 365 admin rights to get the list of domains automatically
 ####
 ##  Details: 
-Once you execute the script, you will be prompt to enter your Office 365 credentials.
-The credentials will be used to obtain all the domains automatically from the tenant - "Get-AzureADDomain".
-This sricpt will only list data, won't do any change.
+# Once you execute the script, you will be prompt to enter your Office 365 credentials.
+# The credentials will be used to obtain all the domains automatically from the tenant - "Get-AzureADDomain".
+# This sricpt will only list data, won't do any change.
 #### The script will detect the DNS records that does not exists.
 #### The script will detect the DNS records that are poiting to Online.
 #### The script will detect the DNS records that are poiting to On-Premises.
@@ -21,4 +21,4 @@ This sricpt will only list data, won't do any change.
 #### ----> Always use the most recent version of the Script <----
 #### Tool:
 ![Tool](https://github.com/tiagoroxo/MigrationToTeamsDNSCheck/blob/main/tool.JPG?raw=true)
-For more details, see http://aka.ms/UpgradeToTeams
+# For more details, see http://aka.ms/UpgradeToTeams
