@@ -55,6 +55,7 @@ Foreach($i in $domains)
         write-host "DOMAIN: " $i.name -BackgroundColor DarkGreen
         #-------------------------------------  
         $DNS_Lyncdiscover = "lyncdiscover."+$i.Name.ToString()
+	$resolution = $null
             try{
                 $resolution = Resolve-DnsName -Name $DNS_Lyncdiscover -type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop
                 if ($resolution.NameHost.ToString() -eq "webdir.online.lync.com")
@@ -85,6 +86,7 @@ Foreach($i in $domains)
             }
         #-------------------------------------    
         $DNS_SIP = "sip."+$i.Name.ToString()
+	$resolution = $null
             try{
                 $resolution = Resolve-DnsName -Name $DNS_SIP -type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop
                 if ($resolution.NameHost.ToString() -eq "sipdir.online.lync.com")
@@ -110,6 +112,7 @@ Foreach($i in $domains)
             }
         #-------------------------------------  
         $DNS_SRVSIP = "_sip._tls."+$i.Name.ToString()
+	$resolution = $null
             try{
                 $resolution = Resolve-DnsName -Name $DNS_SRVSIP -Type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop
                 if ($resolution.NameTarget.ToString() -eq "sipdir.online.lync.com")
@@ -135,6 +138,7 @@ Foreach($i in $domains)
 
         #-------------------------------------  
         $DNS_SRVSIPFED = "_sipfederationtls._tcp."+$i.Name.ToString()
+	$resolution = $null
             try{
                 $resolution = Resolve-DnsName -Name $DNS_SRVSIPFED -Type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop
                 if ($resolution.NameTarget.ToString() -eq "sipfed.online.lync.com")
