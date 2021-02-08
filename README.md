@@ -22,4 +22,6 @@ Powershell Script used to query all Skype for Business hardcoded DNS's to all yo
 #### ----> Always use the most recent version of the Script <----
 #### Tool:
 ![Tool](https://github.com/tiagoroxo/MigrationToTeamsDNSCheck/blob/main/tool.JPG?raw=true)
+##  Kudos:
+Thanks to everyone that is sending feedback to improve this analyser script.
 
