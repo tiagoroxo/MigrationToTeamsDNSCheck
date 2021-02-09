@@ -2,7 +2,7 @@
 ## ------------------------------------------
 ##
 ##Script: MigrationToTeamsDNSCheck
-##Version: V1.3
+##Version: V1.3.1
 ##Author: Tiago Roxo
 ##Description: Powershell Script used to query all Skype for Business hardcoded DNS's to all your Domains part of the tenant, help you detect your current configuration, and help you migrate the tenant Coexistance mode to TeamsOnly.
 ## 
@@ -57,7 +57,7 @@ Foreach($i in $domains)
         $DNS_Lyncdiscover = "lyncdiscover."+$i.Name.ToString()
 	$resolution = $null
             try{
-                $resolution = Resolve-DnsName -Name $DNS_Lyncdiscover -type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop
+                $resolution = Resolve-DnsName -Name $DNS_Lyncdiscover -type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop | where Section -eq "Answer"
                 if ($resolution.NameHost.ToString() -eq "webdir.online.lync.com")
                 {
                     
@@ -88,7 +88,7 @@ Foreach($i in $domains)
         $DNS_SIP = "sip."+$i.Name.ToString()
 	$resolution = $null
             try{
-                $resolution = Resolve-DnsName -Name $DNS_SIP -type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop
+                $resolution = Resolve-DnsName -Name $DNS_SIP -type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop | where Section -eq "Answer"
                 if ($resolution.NameHost.ToString() -eq "sipdir.online.lync.com")
                 {
                     write-host $DNS_SIP $DNSonline $resolution.NameHost
@@ -114,7 +114,7 @@ Foreach($i in $domains)
         $DNS_SRVSIP = "_sip._tls."+$i.Name.ToString()
 	$resolution = $null
             try{
-                $resolution = Resolve-DnsName -Name $DNS_SRVSIP -Type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop
+                $resolution = Resolve-DnsName -Name $DNS_SRVSIP -Type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop | where Section -eq "Answer"
                 if ($resolution.NameTarget.ToString() -eq "sipdir.online.lync.com")
                 {
                     write-host $DNS_SRVSIP $DNSonline $resolution.NameTarget
@@ -140,7 +140,7 @@ Foreach($i in $domains)
         $DNS_SRVSIPFED = "_sipfederationtls._tcp."+$i.Name.ToString()
 	$resolution = $null
             try{
-                $resolution = Resolve-DnsName -Name $DNS_SRVSIPFED -Type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop
+                $resolution = Resolve-DnsName -Name $DNS_SRVSIPFED -Type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop | where Section -eq "Answer"
                 if ($resolution.NameTarget.ToString() -eq "sipfed.online.lync.com")
                 {
                     write-host $DNS_SRVSIPFED $DNSonline $resolution.NameTarget
