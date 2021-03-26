@@ -61,31 +61,32 @@ Foreach($i in $domains)
         $resolution = $null
         try{
             $resolution = Resolve-DnsName -Name $DNS_Lyncdiscover -type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop | where Section -eq "Answer"
-            if ($resolution.Type -eq "CNAME"){
-                if ($resolution.NameHost.ToString() -eq "webdir.online.lync.com"){
-                    write-host $DNS_Lyncdiscover $DNSonline $resolution.NameHost
+            Foreach($d in $resolution){
+                if ($d.Type -eq "CNAME"){
+                    if ($d.NameHost.ToString() -eq "webdir.online.lync.com"){
+                        write-host $DNS_Lyncdiscover $DNSonline $d.NameHost
+                    }
+                    else{
+                        write-host $DNS_Lyncdiscover $DNSOnPremises $d.NameHost -BackgroundColor Yellow -ForegroundColor Black
+                        $warningflag = $true
+                        $DomainsToCheck += $i.Name.ToString()
+                    }
                 }
-                else{
-                    write-host $DNS_Lyncdiscover $DNSOnPremises $resolution.NameHost -BackgroundColor Yellow -ForegroundColor Black
+                if ($d.Type -eq "A"){
+                        write-host $DNS_Lyncdiscover $DNSARecord $d.IPaddress -BackgroundColor Yellow -ForegroundColor Black
+                        $warningflag = $true
+                        $DomainsToCheck += $i.Name.ToString()
+                }
+                if ($d.Type -eq "TXT"){
+                        write-host $DNS_Lyncdiscover $DNSTXTRecord $d.Strings -BackgroundColor Yellow -ForegroundColor Black
+                        $warningflag = $true
+                        $DomainsToCheck += $i.Name.ToString()
+                }
+                if (($d.Type -ne $null ) -and ($d.Type -ne "CNAME" ) -and ($d.Type -ne "A" ) -and ($d.Type -ne "TXT" )){
+                    write-host $DNS_Lyncdiscover $DNSTypeOther $d.Type $d.Target -BackgroundColor Yellow -ForegroundColor Black
                     $warningflag = $true
                     $DomainsToCheck += $i.Name.ToString()
                 }
-            }
-            if ($resolution.Type -eq "A")
-            {
-                    write-host $DNS_Lyncdiscover $DNSARecord $resolution.IPaddress -BackgroundColor Yellow -ForegroundColor Black
-                    $warningflag = $true
-                    $DomainsToCheck += $i.Name.ToString()
-            }
-            if ($resolution.Type -eq "TXT"){
-                    write-host $DNS_Lyncdiscover $DNSTXTRecord $resolution.Strings -BackgroundColor Yellow -ForegroundColor Black
-                    $warningflag = $true
-                    $DomainsToCheck += $i.Name.ToString()
-            }
-            if (($resolution.Type -ne $null ) -and (($resolution.Type -ne "TXT") -and ($resolution.Type -ne "A") -and ($resolution.Type -ne "CNAME"))){
-                write-host $DNS_Lyncdiscover $DNSTypeOther $resolution.Type  -BackgroundColor Yellow -ForegroundColor Black
-                $warningflag = $true
-                $DomainsToCheck += $i.Name.ToString()
             }
         }catch{ 
             if ($Error[0].Exception.Message.Contains($DNSError)){
@@ -102,31 +103,33 @@ Foreach($i in $domains)
         $resolution = $null
          try{
             $resolution = Resolve-DnsName -Name $DNS_SIP -type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop | where Section -eq "Answer"
-            if ( $resolution.Type -eq "CNAME"){
-                if ($resolution.NameHost.ToString() -eq "sipdir.online.lync.com")
-                {
-                    write-host $DNS_SIP $DNSonline $resolution.NameHost
+            Foreach($d in $resolution){
+                if ($d.Type -eq "CNAME"){
+                    if ($d.NameHost.ToString() -eq "sipdir.online.lync.com")
+                    {
+                        write-host $DNS_SIP $DNSonline $d.NameHost
+                    }
+                    else{
+                        write-host $DNS_SIP $DNSOnPremises $d.NameHost -BackgroundColor Yellow -ForegroundColor Black
+                        $warningflag = $true
+                        $DomainsToCheck += $i.Name.ToString()
+                    }
                 }
-                else{
-                    write-host $DNS_SIP $DNSOnPremises $resolution.NameHost -BackgroundColor Yellow -ForegroundColor Black
+                if ($d.Type -eq "A"){
+                        write-host $DNS_SIP $DNSARecord $d.IPaddress -BackgroundColor Yellow -ForegroundColor Black
+                        $warningflag = $true
+                        $DomainsToCheck += $i.Name.ToString()
+                }
+                if ($d.Type -eq "TXT"){
+                        write-host $DNS_SIP $DNSTXTRecord $d.Strings -BackgroundColor Yellow -ForegroundColor Black
+                        $warningflag = $true
+                        $DomainsToCheck += $i.Name.ToString()
+                } 
+                if (($d.Type -ne $null ) -and (($d.Type -ne "TXT") -and ($d.Type -ne "A") -and ($d.Type -ne "CNAME"))){
+                    write-host $DNS_SIP $DNSTypeOther $d.Type  -BackgroundColor Yellow -ForegroundColor Black
                     $warningflag = $true
                     $DomainsToCheck += $i.Name.ToString()
                 }
-            }
-            if ($resolution.Type -eq "A"){
-                    write-host $DNS_SIP $DNSARecord $resolution.IPaddress -BackgroundColor Yellow -ForegroundColor Black
-                    $warningflag = $true
-                    $DomainsToCheck += $i.Name.ToString()
-            }
-            if ($resolution.Type -eq "TXT"){
-                    write-host $DNS_SIP $DNSTXTRecord $resolution.Strings -BackgroundColor Yellow -ForegroundColor Black
-                    $warningflag = $true
-                    $DomainsToCheck += $i.Name.ToString()
-            } 
-            if (($resolution.Type -ne $null ) -and (($resolution.Type -ne "TXT") -and ($resolution.Type -ne "A") -and ($resolution.Type -ne "CNAME"))){
-                write-host $DNS_SIP $DNSTypeOther $resolution.Type  -BackgroundColor Yellow -ForegroundColor Black
-                $warningflag = $true
-                $DomainsToCheck += $i.Name.ToString()
             }
         }catch{ 
             if ($Error[0].Exception.Message.Contains($DNSError)){
@@ -143,30 +146,32 @@ Foreach($i in $domains)
         $resolution = $null
         try{
             $resolution = Resolve-DnsName -Name $DNS_SRVSIP -Type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop | where Section -eq "Answer"
-            if ($resolution.Type -eq "SRV"){
-                if ($resolution.NameTarget.ToString() -eq "sipdir.online.lync.com"){
-                    write-host $DNS_SRVSIP $DNSonline $resolution.NameTarget
+            Foreach($d in $resolution){
+                if ($d.Type -eq "SRV"){
+                    if ($d.NameTarget.ToString() -eq "sipdir.online.lync.com"){
+                        write-host $DNS_SRVSIP $DNSonline $d.NameTarget
+                    }
+                    else{
+                        write-host $DNS_SRVSIP $DNSOnPremises $d.NameTarget -BackgroundColor Yellow -ForegroundColor Black
+                        $warningflag = $true
+                        $DomainsToCheck += $i.Name.ToString()
+                    }
                 }
-                else{
-                    write-host $DNS_SRVSIP $DNSOnPremises $resolution.NameTarget -BackgroundColor Yellow -ForegroundColor Black
+                if ($d.Type -eq "A"){
+                    write-host $DNS_SRVSIP $DNSARecord $d.IPaddress -BackgroundColor Yellow -ForegroundColor Black
                     $warningflag = $true
                     $DomainsToCheck += $i.Name.ToString()
                 }
-            }
-            if ($resolution.Type -eq "A"){
-                write-host $DNS_SRVSIP $DNSARecord $resolution.IPaddress -BackgroundColor Yellow -ForegroundColor Black
-                $warningflag = $true
-                $DomainsToCheck += $i.Name.ToString()
-            }
-            if ($resolution.Type -eq "TXT"){
-                write-host $DNS_SRVSIP $DNSTXTRecord $resolution.Strings -BackgroundColor Yellow -ForegroundColor Black
-                $warningflag = $true
-                $DomainsToCheck += $i.Name.ToString()
-            }
-            if (($resolution.Type -ne $null ) -and (($resolution.Type -ne "TXT") -and ($resolution.Type -ne "A") -and ($resolution.Type -ne "CNAME") -and ($resolution.Type -ne "SRV"))){
-                write-host $DNS_SRVSIP $DNSTypeOther $resolution.Type  -BackgroundColor Yellow -ForegroundColor Black
-                $warningflag = $true
-                $DomainsToCheck += $i.Name.ToString()
+                if ($d.Type -eq "TXT"){
+                    write-host $DNS_SRVSIP $DNSTXTRecord $d.Strings -BackgroundColor Yellow -ForegroundColor Black
+                    $warningflag = $true
+                    $DomainsToCheck += $i.Name.ToString()
+                }
+                if (($d.Type -ne $null ) -and (($d.Type -ne "TXT") -and ($d.Type -ne "A") -and ($d.Type -ne "CNAME") -and ($d.Type -ne "SRV"))){
+                    write-host $DNS_SRVSIP $DNSTypeOther $d.Type  -BackgroundColor Yellow -ForegroundColor Black
+                    $warningflag = $true
+                    $DomainsToCheck += $i.Name.ToString()
+                }
             }
         }catch{ 
             if ($Error[0].Exception.Message.Contains($DNSError)){
@@ -183,30 +188,32 @@ Foreach($i in $domains)
         $resolution = $null
         try{
             $resolution = Resolve-DnsName -Name $DNS_SRVSIPFED -Type ALL -Server $DNSServer -DnsOnly -ErrorAction Stop | where Section -eq "Answer"
-            if ($resolution.Type -eq "SRV"){
-                if ($resolution.NameTarget.ToString() -eq "sipfed.online.lync.com"){
-                    write-host $DNS_SRVSIPFED $DNSonline $resolution.NameTarget
+            Foreach($d in $resolution){
+                if ($d.Type -eq "SRV"){
+                    if ($d.NameTarget.ToString() -eq "sipfed.online.lync.com"){
+                        write-host $DNS_SRVSIPFED $DNSonline $d.NameTarget
+                    }
+                    else{
+                        write-host $DNS_SRVSIPFED $DNSOnPremises $d.NameTarget -BackgroundColor Yellow -ForegroundColor Black
+                        $warningflag = $true
+                        $DomainsToCheck += $i.Name.ToString()
+                    }
                 }
-                else{
-                    write-host $DNS_SRVSIPFED $DNSOnPremises $resolution.NameTarget -BackgroundColor Yellow -ForegroundColor Black
+                if ($d.Type -eq "A"){
+                    write-host $DNS_SRVSIPFED $DNSARecord $d.IPaddress -BackgroundColor Yellow -ForegroundColor Black
                     $warningflag = $true
                     $DomainsToCheck += $i.Name.ToString()
                 }
-            }
-            if ($resolution.Type -eq "A"){
-                write-host $DNS_SRVSIPFED $DNSARecord $resolution.IPaddress -BackgroundColor Yellow -ForegroundColor Black
-                $warningflag = $true
-                $DomainsToCheck += $i.Name.ToString()
-            }
-            if ($resolution.Type -eq "TXT"){
-                write-host $DNS_SRVSIPFED $DNSTXTRecord $resolution.Strings -BackgroundColor Yellow -ForegroundColor Black
-                $warningflag = $true
-                $DomainsToCheck += $i.Name.ToString()
-            }
-            if (($resolution.Type -ne $null ) -and (($resolution.Type -ne "TXT") -and ($resolution.Type -ne "A") -and ($resolution.Type -ne "CNAME") -and ($resolution.Type -ne "SRV"))){
-                write-host $DNS_SRVSIPFED $DNSTypeOther $resolution.Type  -BackgroundColor Yellow -ForegroundColor Black
-                $warningflag = $true
-                $DomainsToCheck += $i.Name.ToString()
+                if ($d.Type -eq "TXT"){
+                    write-host $DNS_SRVSIPFED $DNSTXTRecord $d.Strings -BackgroundColor Yellow -ForegroundColor Black
+                    $warningflag = $true
+                    $DomainsToCheck += $i.Name.ToString()
+                }
+                if (($d.Type -ne $null ) -and (($d.Type -ne "TXT") -and ($d.Type -ne "A") -and ($d.Type -ne "CNAME") -and ($d.Type -ne "SRV"))){
+                    write-host $DNS_SRVSIPFED $DNSTypeOther $d.Type  -BackgroundColor Yellow -ForegroundColor Black
+                    $warningflag = $true
+                    $DomainsToCheck += $i.Name.ToString()
+                }
             }
         }catch{ 
             if ($Error[0].Exception.Message.Contains($DNSError)){
@@ -221,10 +228,11 @@ Foreach($i in $domains)
 }
      
 if ($warningflag){
+    $total = ($DomainsToCheck | sort -Unique).count
     write-host ""
     write-host "-------------------------------------------------"
     write-host "WARNINGS:" -BackgroundColor Yellow -ForegroundColor Black
-    write-host "Domains that are requiring attention:"
+    write-host $total "Domains are requiring attention:"
     write-host "........."
     $DomainsToCheck | sort -Unique
     write-host "........."
