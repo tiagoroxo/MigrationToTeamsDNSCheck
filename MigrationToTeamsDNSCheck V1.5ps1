@@ -18,23 +18,7 @@ try{
 }
 cls
 #Get the List of Domains from O365 Tenant
-#$domains = Get-AzureADDomain
-
-####################################
-##DEBUG
-####################################
-$domains = @(
-           [pscustomobject]@{Name='lemonslice.co'}
-           [pscustomobject]@{Name='dawhitne.net'}
-           [pscustomobject]@{Name='dawhitne2.onmicrosoft.com'}
-           [pscustomobject]@{Name='dawhitne2.com'}
-           [pscustomobject]@{Name='child.dawhitne2.net'}
-           [pscustomobject]@{Name='bertelsmann.de'}
-           [pscustomobject]@{Name='surfacewilmar.co.zw'}
-
-)
-###################################
-
+$domains = Get-AzureADDomain
 
 write-host "-------------------------------------------------"
 write-host $domains.Count "Domains found in the tenant"
