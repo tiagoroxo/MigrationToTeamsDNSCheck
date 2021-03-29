@@ -25,13 +25,22 @@ $DNSError = "DNS name does not exist"
 ##############################################################################################
 
 ##Function: Connection to Microsoft Teams
+try{
+
 Import-Module MicrosoftTeams
 Connect-MicrosoftTeams
 Read-Host -Prompt "Press enter to Start"
 cls
 
+
 #Function: Get the List of SIP Domains Enabled/Disabled
 $domains = get-CsOnlineSipDomain
+
+}catch{
+    write-host "Problem loading Microsoft Teams Module - Make sure the Authentication is correct and make sure you latest version installed - https://www.powershellgallery.com/packages/MicrosoftTeams/2.0.0" -ForegroundColor Red
+    $version = Get-Module MicrosoftTeams 
+    exit
+}
 
 #Function: Start of the Script
 write-host "-------------------------------------------------"
