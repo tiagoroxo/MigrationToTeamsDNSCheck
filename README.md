@@ -10,8 +10,9 @@ Powershell Script used to query Skype for Business hardcoded DNS's to all your D
 ####
 ##  Details: 
 - Once you execute the script, you will be prompt to enter your Office 365 credentials.
-- The credentials will be used to obtain all the domains automatically from the tenant - "Get-AzureADDomain".
+- The credentials will be used to obtain all the SIP Domains automatically from the tenant - "Get-CsOnlineSipDomain".
 - This sricpt will only list data, won't do any change.
+#### The script will detect if the SIP Domains are disabled or Enabled.
 #### The script will detect the DNS records that does not exists.
 #### The script will detect the DNS records that are poiting to Online.
 #### The script will detect the DNS records that are poiting to On-Premises.
