@@ -2,34 +2,18 @@ cls
 ## ------------------------------------------
 ##
 ##Script: MigrationToTeamsDNSCheck
-##Version: V1.5
+##Version: V1.6
 ##Author: Tiago Roxo
 ##Description: Powershell Script used to query Skype for Business hardcoded DNS's to all your Domains part of the tenant, help you detect your current configuration, and help you migrate the tenant Coexistance mode to TeamsOnly.
-## 
+##
+##Warning: Make sure you have the latest "MicrosoftTeams" module version installed - "Update-Module MicrosoftTeams".
+##
 ## ------------------------------------------
 
-try{
-	$hello = Get-AzureADTenantDetail
-    cls
-	
-}catch{
-    Connect-AzureAD
-    Read-Host -Prompt "Press enter to Start"
-}
-cls
-#Get the List of Domains from O365 Tenant
-$domains = Get-AzureADDomain
-
-write-host "-------------------------------------------------"
-write-host $domains.Count "Domains found in the tenant"
-write-host "-------------------------------------------------"
-#Step 5 - Check SFB DNS records
-write-host "-------------------------------------------------"
-write-host "Checking Skype for Business hardcoded DNS Records:"
-write-host "-------------------------------------------------"
-
+#Variables
 ##############################################################################################
 $warningflag = $false
+$domainStatus = $null
 $DomainsToCheck = @()
 $DNSServer = 8.8.8.8
 $DNSonline = "-> DNS Record is pointing to an Online environment:"
@@ -40,19 +24,45 @@ $DNSTypeOther = "-> DNS Record type found :"
 $DNSError = "DNS name does not exist"
 ##############################################################################################
 
+##Function: Connection to Microsoft Teams
+Import-Module MicrosoftTeams
+Connect-MicrosoftTeams
+Read-Host -Prompt "Press enter to Start"
+cls
+
+#Function: Get the List of SIP Domains Enabled/Disabled
+$domains = get-CsOnlineSipDomain
+
+#Function: Start of the Script
+write-host "-------------------------------------------------"
+write-host $domains.Count "SIP Domains found in the tenant"
+write-host "-------------------------------------------------"
+write-host "-------------------------------------------------"
+write-host "Checking Skype for Business hardcoded DNS Records:"
+write-host "-------------------------------------------------"
+
 Foreach($i in $domains)
 {
     #Ignores the queries to the default O365 Domain
     if ($i.name.Contains("onmicrosoft.com")){
         write-host ""
-        write-host "DOMAIN: " $i.name -BackgroundColor DarkGreen
+        write-host "DOMAIN: " $i.name -BackgroundColoR Black -ForegroundColor White
         write-host $i.name "it's the default O365 domain from the tenant, does not require any validations."
     }
     
     #Checks the DNS records for all domains part of the O365 tenant
     else{
-        write-host "" -BackgroundColor DarkGreen
-        write-host "DOMAIN:" $i.name -BackgroundColor DarkGreen
+        write-host ""
+        write-host "DOMAIN:" $i.name -BackgroundColoR Black -ForegroundColor White
+        if ($i.Status -eq "Enabled"){
+            write-host "SIP Domain Status: Enabled" -ForegroundColor Green
+        }if ($i.Status -eq "Disabled"){
+            write-host "SIP Domain Status: Disabled" -ForegroundColor Red
+            $domainStatus = "true"  
+        }if (($i.Status -ne "Disabled") -and ($i.Status -ne "Enabled")) {
+            write-host "SIP Domain Status: Unknown" -ForegroundColor Yellow
+            $domainStatus = "true"
+        }
 
         #-------------------------------------
         #DNS QUERY: LYNCDISCOVER
@@ -232,9 +242,16 @@ if ($warningflag){
     write-host ""
     write-host "-------------------------------------------------"
     write-host "WARNINGS:" -BackgroundColor Yellow -ForegroundColor Black
-    write-host $total "Domains are requiring attention:"
+    write-host $total "SIP Domains are requiring attention:"
     write-host "........."
     $DomainsToCheck | sort -Unique
+    write-host "........."
+    if ($domainStatus -eq "true"){
+        write-host "SIP Domain Status: you have as well some SIP Domains that are in Disabled/Unknown Status. Check the above summary." -ForegroundColor Yellow
+        }
+    else{
+        write-host "SIP Domain Status: All SIP Domains are in Enabled Status. Check the above summary." -ForegroundColor Green
+    }
     write-host "........."
     write-host "This is normally caused when there are still an Skype for Business on-premises environment deployed or the DNS records are not properly configured."
     write-host "If you are planning to migrate to TeamsOnly mode, please make sure that all the DNS records are pointing to Online, or if you don't plan to use that Domain, delete the DNS records."
@@ -245,7 +262,7 @@ if ($warningflag){
     write-host "-------------------------------------------------"
     write-host "200OK" -BackgroundColor DarkGreen
     write-host "The existing DNS records are currently poiting to the Online services."
-    write-host "You can now migrate your tenant to TeamsOnly Mode."
+    write-host "You can now migrate your tenant Coexistence mode to TeamsOnly Mode."
     write-host "-------------------------------------------------"
     }
 Read-Host -Prompt "Press enter to Finish"
