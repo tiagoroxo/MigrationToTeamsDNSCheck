@@ -4,8 +4,10 @@ Powershell Script used to query Skype for Business hardcoded DNS's to all Domain
 ####  1. Open PowerShell and run the following cmdlet: "Set-ExecutionPolicy -ExecutionPolicy Unrestricted"
 ####  2. Install/Update Microsoft Teams Powershell Module: 
 - Install: Open PowerShell and run the following cmdlet: "Install-Module -Name MicrosoftTeams"
-- Module Source: https://www.powershellgallery.com/packages/MicrosoftTeams/2.0.0
 - Update: Open PowerShell and run the following cmdlet: "Update-Module MicrosoftTeams"
+- .
+.
+- Module Source: https://www.powershellgallery.com/packages/MicrosoftTeams/2.0.0
 ####  2.1. Confirm that you Teams Module at least on version 2.0.0:
 - Run the following cmdlets to confirm module loaded:
 - -> Import-Module MicrosoftTeams
